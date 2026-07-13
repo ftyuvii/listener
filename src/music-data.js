@@ -165,3 +165,20 @@ const MUSIC_LIBRARY = [
     ]
   }
 ];
+
+
+window.myAlbumsData = [
+  {
+    id: "album_1",
+    title: "After Hours",
+    artist: "The Weeknd",
+    cover: "https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?q=80&w=500&auto=format&fit=cover"
+  },
+  {
+    id: "album_2",
+    title: "Starboy",
+    artist: "The Weeknd",
+    cover: "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=500&auto=format&fit=cover"
+  }
+];
+
