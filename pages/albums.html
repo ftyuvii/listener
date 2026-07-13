@@ -145,13 +145,16 @@
 const menuOpenBtn = document.getElementById('menu-open-btn');
 const sideMenu = document.getElementById('side-menu');
 const menuOverlay = document.getElementById('menu-overlay');
+const menuLayer = document.getElementById('menu-layer');
 
 function openMenu() {
+  menuLayer.classList.add('open');
   sideMenu.classList.add('open');
   menuOverlay.classList.add('open');
 }
 
 function closeMenu() {
+  menuLayer.classList.remove('open');
   sideMenu.classList.remove('open');
   menuOverlay.classList.remove('open');
 }
