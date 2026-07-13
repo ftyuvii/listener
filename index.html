@@ -338,127 +338,6 @@
 
 <audio id="audio" preload="auto"></audio>
 
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
-import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithRedirect, onAuthStateChanged, updateProfile, signOut } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyDWFo4PwnwWfNUS-s4vXQHINAejp3wwPrk",
-  authDomain: "restify-1ec27.firebaseapp.com",
-  projectId: "restify-1ec27",
-  storageBucket: "restify-1ec27.firebasestorage.app",
-  messagingSenderId: "179542882874",
-  appId: "1:179542882874:web:a6166769efff7151239303",
-  measurementId: "G-CEWQDRWWCW"
-};
-
-const firebaseApp = initializeApp(firebaseConfig);
-const auth = getAuth(firebaseApp);
-const googleProvider = new GoogleAuthProvider();
-
-const loginScreen = document.getElementById('login-screen');
-const googleBtn = document.getElementById('google-login-btn');
-const googleBtnLabel = googleBtn.querySelector('span');
-const avatarMark = document.getElementById('avatar-mark');
-const avatarFallback = document.getElementById('avatar-fallback');
-const userAvatarImg = document.getElementById('user-avatar-img');
-const overlay = document.getElementById('overlay');
-const profileSheet = document.getElementById('profile-sheet');
-const profilePhoto = document.getElementById('profile-photo');
-const profileNameInput = document.getElementById('profile-name-input');
-const profileEmail = document.getElementById('profile-email');
-const profileSaveBtn = document.getElementById('profile-save-btn');
-const profileLogoutBtn = document.getElementById('profile-logout-btn');
-
-function applyUser(user) {
-  const photo = user.photoURL || '';
-  const name = user.displayName || (user.email ? user.email.split('@')[0] : 'You');
-  if (photo) {
-    userAvatarImg.src = photo;
-    userAvatarImg.style.display = 'block';
-    avatarFallback.style.display = 'none';
-    profilePhoto.src = photo;
-    profilePhoto.style.display = 'block';
-  } else {
-    userAvatarImg.style.display = 'none';
-    profilePhoto.style.display = 'none';
-    avatarFallback.style.display = 'flex';
-    avatarFallback.textContent = name.charAt(0).toUpperCase();
-  }
-  profileNameInput.value = name;
-  profileEmail.textContent = user.email || '';
-}
-
-function showApp(user) {
-  applyUser(user);
-  loginScreen.classList.add('hide');
-}
-
-function showLogin() {
-  closeProfileSheet();
-  loginScreen.classList.remove('hide');
-  googleBtn.disabled = false;
-  googleBtnLabel.textContent = 'Continue with Google';
-}
-
-function openProfileSheet() {
-  profileSheet.classList.add('open');
-  overlay.classList.add('open');
-}
-
-function closeProfileSheet() {
-  profileSheet.classList.remove('open');
-  overlay.classList.remove('open');
-}
-
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    showApp(user);
-  } else {
-    showLogin();
-  }
-});
-
-googleBtn.addEventListener('click', async () => {
-  googleBtn.disabled = true;
-  googleBtnLabel.textContent = 'Signing in...';
-  try {
-    await signInWithPopup(auth, googleProvider);
-  } catch (err) {
-    if (err.code === 'auth/popup-blocked' || err.code === 'auth/cancelled-popup-request' || err.code === 'auth/operation-not-supported-in-this-environment') {
-      await signInWithRedirect(auth, googleProvider);
-    } else {
-      googleBtn.disabled = false;
-      googleBtnLabel.textContent = 'Continue with Google';
-    }
-  }
-});
-
-avatarMark.addEventListener('click', openProfileSheet);
-
-overlay.addEventListener('click', () => {
-  if (profileSheet.classList.contains('open')) closeProfileSheet();
-});
-
-profileSaveBtn.addEventListener('click', async () => {
-  const newName = profileNameInput.value.trim();
-  if (!newName || !auth.currentUser) return;
-  profileSaveBtn.disabled = true;
-  profileSaveBtn.textContent = 'Saving...';
-  try {
-    await updateProfile(auth.currentUser, { displayName: newName });
-    profileEmail.textContent = auth.currentUser.email || '';
-  } finally {
-    profileSaveBtn.disabled = false;
-    profileSaveBtn.textContent = 'Save Changes';
-    closeProfileSheet();
-  }
-});
-
-profileLogoutBtn.addEventListener('click', async () => {
-  await signOut(auth);
-});
-</script>
 <script>
 const menuOpenBtn = document.getElementById('menu-open-btn');
 const sideMenu = document.getElementById('side-menu');
@@ -478,6 +357,7 @@ menuOpenBtn.addEventListener('click', openMenu);
 menuOverlay.addEventListener('click', closeMenu);
 </script>
 <script src="src/music-data.js" defer></script>
+<script type="module" src="engine/auth.js"></script> 
 <script src="src/app.js" defer></script>
 </body>
 </html>
